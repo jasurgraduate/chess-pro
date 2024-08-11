@@ -1,8 +1,11 @@
+// src/game/ChessGame.js
+
 import React, { useState } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
 import Error from './error'; // Import Error component
 import GameState from './gameState'; // Import GameState component
+import { playSound } from './sound'; // Import playSound function
 import './ChessGame.css'; // Import CSS for this component
 
 const ChessGame = () => {
@@ -20,8 +23,12 @@ const ChessGame = () => {
 
       if (move === null) {
         setError('Invalid move');
+        playSound('error'); // Play error sound
         return false; // Invalid move
       }
+
+      // Play move sound
+      playSound('move');
 
       // Update the FEN string and clear any existing error
       setFen(game.fen());
@@ -33,6 +40,7 @@ const ChessGame = () => {
 
       // Set a user-friendly error message
       setError('Incorrect move');
+      playSound('error'); // Play error sound
       return false;
     }
   };

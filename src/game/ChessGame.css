@@ -2,40 +2,36 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: #333;
     height: 100vh;
     width: 100vw; /* Full width */
     overflow: hidden; /* Hide scrollbars on the body */
 }
 
-/* Chessboard container styles */
+/* Container for centering the chessboard */
 .chessboard-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1; /* Allow container to grow and take remaining space */
-    background-color: #f4f4f4; /* Light grey background */
+    height: calc(100vh - 120px); /* Adjust according to header/footer height */
 }
 
 /* Wrapper for the chessboard to ensure proper alignment and spacing */
 .chessboard-wrapper {
-    position: relative;
-    width: 70%;
-    height: 70%;
-    max-width: 90vh; /* Ensure the width does not exceed height */
-    max-height: 90vh; /* Ensure the height does not exceed viewport */
+    width: 550px; /* Adjust to your desired size */
+    height: 550px; /* Adjust to your desired size */
+    border: 2px solid #fbfbfb;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow */
+    background-color: #fff; /* White background for the board */
 }
 
 /* Chessboard styles */
 .chessboard {
-    border: 2px solid #333;
+    width: 100%;
+    height: 100%;
     border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow */
-    background-color: #fff; /* White background for the board */
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
 }
 
 /* Chessboard square styles */
@@ -43,15 +39,15 @@ body, html {
     width: 12.5%; /* 8x8 grid, each square is 12.5% of the board */
     height: 12.5%; /* 8x8 grid, each square is 12.5% of the board */
     box-sizing: border-box;
-    position: relative;
 }
 
+/* Alternating square colors to match Chess.com style */
 .chessboard .react-chessboard__square:nth-child(even) {
-    background-color: #a9d18e; /* Light green square color */
+    background-color: #f0d9b5; /* Light square color similar to Chess.com */
 }
 
 .chessboard .react-chessboard__square:nth-child(odd) {
-    background-color: #6aa84f; /* Dark green square color */
+    background-color: #b58863; /* Dark square color similar to Chess.com */
 }
 
 /* Highlighting moves (e.g., green squares) */
@@ -87,25 +83,16 @@ body, html {
 /* Game state styles */
 .game-state {
     position: absolute;
-    top: 60px;
+    top: 20%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #e2e3e5;
-    color: #383d41;
-    border: 1px solid #b9bfc3;
+    background-color: #d7f8f2;
+    color: #0a002d;
+    border: 1px solid #f5c6cb;
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
-    z-index: 1000; /* Ensure it appears above other elements */
+    z-index: 2; /* Ensure it appears above other elements */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Drop shadow */
-}
-
-/* Footer styles */
-.App-footer {
-    background-color: #282c34;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
