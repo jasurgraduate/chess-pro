@@ -1,5 +1,3 @@
-// src/game/ChessGame.js
-
 import React, { useState } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
@@ -18,7 +16,7 @@ const ChessGame = () => {
       const move = game.move({
         from: sourceSquare,
         to: targetSquare,
-        promotion: 'q', // always promote to a queen for simplicity
+        promotion: 'q', // Always promote to a queen for simplicity
       });
 
       if (move === null) {
@@ -27,8 +25,17 @@ const ChessGame = () => {
         return false; // Invalid move
       }
 
-      // Play move sound
-      playSound('move');
+      // Play appropriate sound based on move type
+      if (move.captured) {
+        playSound('capture'); // Play capture sound
+      } else {
+        playSound('move'); // Play move sound
+      }
+
+      // Check if the move places the opponent's king in check
+      if (game.inCheck()) {
+        playSound('check'); // Play check sound
+      }
 
       // Update the FEN string and clear any existing error
       setFen(game.fen());
@@ -48,7 +55,7 @@ const ChessGame = () => {
   return (
     <div className="chessboard-container">
       <Error message={error} />
-      <GameState game={game} /> {/* Add the GameState component */}
+      <GameState game={game} /> {/* Display game state messages */}
       <div className="chessboard-wrapper">
         <Chessboard
           position={fen}
