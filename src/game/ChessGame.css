@@ -15,6 +15,7 @@ body, html {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 120px); /* Adjust according to header/footer height */
+    border: 2px solid #000; /* Black border around the board container */
 }
 
 /* Wrapper for the chessboard to ensure proper alignment and spacing */
@@ -25,42 +26,74 @@ body, html {
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow */
     background-color: #fff; /* White background for the board */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Chessboard styles */
 .chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
     width: 100%;
     height: 100%;
     border-radius: 8px; /* Rounded corners */
 }
 
 /* Chessboard square styles */
-.chessboard .react-chessboard__square {
-    width: 12.5%; /* 8x8 grid, each square is 12.5% of the board */
-    height: 12.5%; /* 8x8 grid, each square is 12.5% of the board */
+.chessboard .chessboard-square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     box-sizing: border-box;
+    border: 1px solid #ddd; /* Optional: Add borders between squares */
 }
 
-/* Alternating square colors to match Chess.com style */
-.chessboard .react-chessboard__square:nth-child(even) {
-    background-color: #f0d9b5; /* Light square color similar to Chess.com */
+.chessboard .chessboard-square.light {
+    background-color: #f0f0f0 !important; /* Light gray */
 }
 
-.chessboard .react-chessboard__square:nth-child(odd) {
-    background-color: #b58863; /* Dark square color similar to Chess.com */
+.chessboard .chessboard-square.dark {
+    background-color: #3e3e3e !important; /* Dark gray */
+}
+
+/* Piece styles */
+.chess-piece {
+    width: 100%; /* Fit the square */
+    height: 100%; /* Fit the square */
+    object-fit: contain; /* Ensure images are contained within their bounds */
+    border-radius: 50%; /* Round edges for a polished look */
+    border: 2px solid #333; /* Add a border around pieces */
 }
 
 /* Highlighting moves (e.g., green squares) */
-.chessboard .react-chessboard__square.highlighted {
+.chessboard .chessboard-square.highlighted {
     background-color: rgba(0, 255, 0, 0.3); /* Light green highlight */
+    border: 2px solid #0f0; /* Green border for highlighted squares */
 }
 
-/* Piece styles (if necessary) */
-.chess-piece {
-    font-size: 24px; /* Adjust piece size */
-    text-align: center;
-    line-height: 1.5;
-    color: #333; /* Default piece color */
+/* Highlighting selected pieces */
+.chess-piece.selected {
+    border-color: #f0f; /* Magenta border for selected piece */
+}
+
+/* Add hover effect to chessboard squares */
+.chessboard .chessboard-square:hover {
+    background-color: rgba(255, 255, 0, 0.2); /* Light yellow highlight on hover */
+}
+
+/* Add focus effect for accessibility */
+.chessboard .chessboard-square:focus {
+    outline: 3px solid #00f; /* Blue outline for focused squares */
+    outline-offset: 2px; /* Space between the outline and the element */
+}
+
+/* Square border for move suggestions */
+.chessboard .chessboard-square.droppable {
+    border: 2px dashed #ff0; /* Dashed yellow border for droppable squares */
 }
 
 /* Error message styles */

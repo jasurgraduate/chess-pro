@@ -52,6 +52,15 @@ const ChessGame = () => {
     }
   };
 
+  const customDarkSquareStyle = {
+    backgroundColor: '#779556', // Set the desired dark square color (similar to Chess.com)
+  };
+
+  const customLightSquareStyle = {
+    backgroundColor: '#ebecd0', // Set the desired dark square color (similar to Chess.com)
+  };
+
+
   return (
     <div className="chessboard-container">
       <Error message={error} />
@@ -60,6 +69,13 @@ const ChessGame = () => {
         <Chessboard
           position={fen}
           onPieceDrop={onDrop}
+          style={{
+            backgroundColor: '#f0d9b5', // Light square color (similar to Chess.com)
+            borderRadius: '8px', // Add rounded corners
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Add subtle shadow
+          }}
+          customDarkSquareStyle={customDarkSquareStyle} // Apply custom dark square style
+          customLightSquareStyle={customLightSquareStyle}
         />
       </div>
     </div>

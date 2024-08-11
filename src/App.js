@@ -12,7 +12,7 @@ function App() {
         <ChessGame />
       </main>
       <footer className="App-footer">
-        <h1>Made in China</h1>
+        <h1>Made in China 😁😹</h1>
       </footer>
     </div>
   );
