@@ -1,1 +1,1 @@
-Still under maintenance, but you can still play it 😹
+Project is under maintenance, but you can still play it 😹
