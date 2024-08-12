@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
 import Error from './error';
@@ -6,105 +6,22 @@ import GameState from './gameState';
 import { playSound } from './sound';
 import './ChessGame.css';
 
-// Define the piece theme with custom images
-const pieceTheme = {
-  w_pawn: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/pawn_w.png"
-      alt="White Pawn"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  w_rook: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/rook_w.png"
-      alt="White Rook"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  w_knight: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/knight_w.png"
-      alt="White Knight"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  w_bishop: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/bishop_w.png"
-      alt="White Bishop"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  w_queen: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/queen_w.png"
-      alt="White Queen"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  w_king: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/king_w.png"
-      alt="White King"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  b_pawn: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/pawn_b.png"
-      alt="Black Pawn"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  b_rook: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/rook_b.png"
-      alt="Black Rook"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  b_knight: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/knight_b.png"
-      alt="Black Knight"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  b_bishop: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/bishop_b.png"
-      alt="Black Bishop"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  b_queen: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/queen_b.png"
-      alt="Black Queen"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-  b_king: ({ isDragging, squareWidth, square }) => (
-    <img
-      src="/chess-pro/img/king_b.png"
-      alt="Black King"
-      style={{ width: squareWidth, height: squareWidth }}
-    />
-  ),
-};
-
 const ChessGame = () => {
   const [game] = useState(new Chess());
   const [fen, setFen] = useState(game.fen());
   const [error, setError] = useState('');
 
-  const onDrop = (sourceSquare, targetSquare) => {
+  const onDrop = (sourceSquare, targetSquare, piece) => {
     try {
+      // Ensure the promotion piece is valid
+      const promotionPiece = piece[1] && ['q', 'r', 'b', 'n'].includes(piece[1].toLowerCase()) 
+                              ? piece[1].toLowerCase() 
+                              : 'q'; // Default to Queen if invalid
+
       const move = game.move({
         from: sourceSquare,
         to: targetSquare,
-        promotion: 'q',
+        promotion: promotionPiece,
       });
 
       if (move === null) {
@@ -134,6 +51,24 @@ const ChessGame = () => {
     }
   };
 
+  const customPieces = useMemo(() => {
+    const pieces = ["wP", "wN", "wB", "wR", "wQ", "wK", "bP", "bN", "bB", "bR", "bQ", "bK"];
+    const pieceComponents = {};
+    pieces.forEach(piece => {
+      pieceComponents[piece] = ({ squareWidth }) => (
+        <div
+          style={{
+            width: squareWidth,
+            height: squareWidth,
+            backgroundImage: `url(/chess-pro/img/${piece}.png)`,
+            backgroundSize: "100%",
+          }}
+        />
+      );
+    });
+    return pieceComponents;
+  }, []);
+
   const customDarkSquareStyle = {
     backgroundColor: '#779556',
   };
@@ -150,10 +85,10 @@ const ChessGame = () => {
         <Chessboard
           position={fen}
           onPieceDrop={onDrop}
-          pieceTheme={pieceTheme}
+          customPieces={customPieces}
           style={{
             backgroundColor: '#f0d9b5',
-            borderRadius: '80px',
+            borderRadius: '8px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           }}
           customDarkSquareStyle={customDarkSquareStyle}
