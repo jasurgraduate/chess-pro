@@ -19,17 +19,16 @@ export const handleDrop = (game, setFen, setError) => (sourceSquare, targetSquar
       return false;
     }
 
-    // Check if the move resulted in a checkmate
-    if (game.game_over() && game.in_checkmate()) {
-      playSound('checkmate'); // Play the checkmate sound
-    } else if (move.promotion) {
+    if (move.promotion) {
       playSound('promote'); // Play the promotion sound
     } else if (move.captured) {
-      playSound('capture'); // Play the capture sound
-    } else if (game.in_check()) {
-      playSound('check'); // Play the check sound
+      playSound('capture');
     } else {
-      playSound('move'); // Play the move sound
+      playSound('move');
+    }
+
+    if (game.inCheck()) {
+      playSound('check');
     }
 
     setFen(game.fen());

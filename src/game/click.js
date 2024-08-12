@@ -73,26 +73,30 @@ export function useClickHandling(setFen) {
 
   function onSquareClick(square) {
     if (!moveFrom) {
+      // No piece has been selected yet
       const hasMoveOptions = getMoveOptions(square);
       if (hasMoveOptions) {
         setMoveFrom(square);
         setError(''); // Clear error if a valid piece is selected
       } else {
         setError('No valid moves for this piece');
-        playSound('error');
+        // Error sound should be played only if a piece is selected
+        
       }
       return;
     }
 
     if (!moveTo) {
+      // Piece has been selected
       const moves = game.moves({ from: moveFrom, verbose: true });
       const foundMove = moves.find(m => m.from === moveFrom && m.to === square);
 
       if (!foundMove) {
+        // Invalid move after selecting a piece
         const hasMoveOptions = getMoveOptions(square);
         setMoveFrom(hasMoveOptions ? square : "");
         setError('Invalid move');
-        playSound('error');
+        playSound('error'); // Play error sound only if a piece has been selected
         return;
       }
 
