@@ -15,13 +15,13 @@ body, html {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 120px); /* Adjust according to header/footer height */
-    border: 1px solid #85d6da; /* Black border around the board container */
+    border: 1px solid #85d6da47; /* Black border around the board container */
 }
 
 /* Wrapper for the chessboard to ensure proper alignment and spacing */
 .chessboard-wrapper {
-    width: 550px; /* Adjust to your desired size */
-    height: 550px; /* Adjust to your desired size */
+    width: 550px; /* Default size for larger screens */
+    height: 550px;
     border: 2px solid #fbfbfb;
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow */
@@ -41,60 +41,6 @@ body, html {
     border-radius: 8px; /* Rounded corners */
 }
 
-/* Chessboard square styles */
-.chessboard .chessboard-square {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    border: 1px solid #ddd; /* Optional: Add borders between squares */
-}
-
-.chessboard .chessboard-square.light {
-    background-color: #f0f0f0 !important; /* Light gray */
-}
-
-.chessboard .chessboard-square.dark {
-    background-color: #3e3e3e !important; /* Dark gray */
-}
-
-/* Piece styles */
-.chess-piece {
-    width: 100%; /* Fit the square */
-    height: 100%; /* Fit the square */
-    object-fit: contain; /* Ensure images are contained within their bounds */
-    border-radius: 50%; /* Round edges for a polished look */
-    border: 2px solid #333; /* Add a border around pieces */
-}
-
-/* Highlighting moves (e.g., green squares) */
-.chessboard .chessboard-square.highlighted {
-    background-color: rgba(0, 255, 0, 0.3); /* Light green highlight */
-    border: 2px solid #0f0; /* Green border for highlighted squares */
-}
-
-/* Highlighting selected pieces */
-.chess-piece.selected {
-    border-color: #f0f; /* Magenta border for selected piece */
-}
-
-/* Add hover effect to chessboard squares */
-.chessboard .chessboard-square:hover {
-    background-color: rgba(255, 255, 0, 0.2); /* Light yellow highlight on hover */
-}
-
-/* Add focus effect for accessibility */
-.chessboard .chessboard-square:focus {
-    outline: 3px solid #00f; /* Blue outline for focused squares */
-    outline-offset: 2px; /* Space between the outline and the element */
-}
-
-/* Square border for move suggestions */
-.chessboard .chessboard-square.droppable {
-    border: 2px dashed #ff0; /* Dashed yellow border for droppable squares */
-}
 
 /* Error message styles */
 .error-message {
@@ -126,4 +72,33 @@ body, html {
     font-weight: bold;
     z-index: 2; /* Ensure it appears above other elements */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Drop shadow */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .chessboard-wrapper {
+        width: 90vw; /* Adjust to fit within the viewport */
+        height: 90vw; /* Maintain aspect ratio */
+    }
+    
+    .error-message, .game-state {
+        font-size: 14px; /* Smaller font size for mobile */
+        padding: 8px 16px; /* Adjust padding */
+        top: 10%; /* Adjust top position */
+        left: 5%; /* Adjust left position */
+    }
+}
+
+@media (max-width: 480px) {
+    .chessboard-wrapper {
+        width: 100vw; /* Full width for very small screens */
+        height: 100vw; /* Maintain aspect ratio */
+    }
+    
+    .error-message, .game-state {
+        font-size: 12px; /* Smaller font size for very small screens */
+        padding: 6px 12px; /* Adjust padding */
+        top: 5%; /* Adjust top position */
+        left: 2%; /* Adjust left position */
+    }
 }

@@ -1,20 +1,47 @@
-// src/moves.js
+import { playSound } from './sound';
 
-import { Chess } from 'chess.js';
+// Move handling function
+export const handleDrop = (game, setFen, setError) => (sourceSquare, targetSquare, piece) => {
+  try {
+    const promotionPiece = piece[1] && ['q', 'r', 'b', 'n'].includes(piece[1].toLowerCase())
+      ? piece[1].toLowerCase()
+      : 'q'; // Default to Queen if invalid
 
-// Initialize a new Chess game
-export const initializeGame = () => new Chess();
+    const move = game.move({
+      from: sourceSquare,
+      to: targetSquare,
+      promotion: promotionPiece,
+    });
 
-// Handle moves for the chess game
-export const makeMove = (game, move) => {
-  const moveResult = game.move({
-    from: move.sourceSquare,
-    to: move.targetSquare,
-    promotion: 'q' // Always promote to a queen for simplicity
-  });
+    if (move === null) {
+      setError('Invalid move');
+      playSound('error');
+      return false;
+    }
 
-  return moveResult ? game : null;
+    // Check if the move resulted in a checkmate
+    if (game.game_over() && game.in_checkmate()) {
+      playSound('checkmate'); // Play the checkmate sound
+    } else if (move.promotion) {
+      playSound('promote'); // Play the promotion sound
+    } else if (move.captured) {
+      playSound('capture'); // Play the capture sound
+    } else if (game.in_check()) {
+      playSound('check'); // Play the check sound
+    } else {
+      playSound('move'); // Play the move sound
+    }
+
+    setFen(game.fen());
+    setError('');
+    return true;
+  } catch (err) {
+    console.error('Error in move:', err);
+    // Only set the error message and play sound if it's not a promotion error
+    if (!err.message.includes('promotion')) {
+      setError('Incorrect move');
+      playSound('error');
+    }
+    return false;
+  }
 };
-
-// Get the current FEN string of the game
-export const getFen = (game) => game.fen();

@@ -1,55 +1,28 @@
 import React, { useState, useMemo } from 'react';
 import { Chessboard } from 'react-chessboard';
-import { Chess } from 'chess.js';
 import Error from './error';
+import { Chess } from 'chess.js';
 import GameState from './gameState';
-import { playSound } from './sound';
+import { handleDrop } from './moves';
+import { useClickHandling } from './click';
 import './ChessGame.css';
 
 const ChessGame = () => {
-  const [game] = useState(new Chess());
-  const [fen, setFen] = useState(game.fen());
+  const [fen, setFen] = useState(new Chess().fen()); // Initialize with the starting FEN
   const [error, setError] = useState('');
 
-  const onDrop = (sourceSquare, targetSquare, piece) => {
-    try {
-      // Ensure the promotion piece is valid
-      const promotionPiece = piece[1] && ['q', 'r', 'b', 'n'].includes(piece[1].toLowerCase()) 
-                              ? piece[1].toLowerCase() 
-                              : 'q'; // Default to Queen if invalid
+  const {
+    game,
+    onSquareClick,
+    onSquareRightClick,
+    onPromotionPieceSelect,
+    showPromotionDialog,
+    optionSquares,
+    rightClickedSquares,
+    moveTo
+  } = useClickHandling(setFen); // Pass setFen here
 
-      const move = game.move({
-        from: sourceSquare,
-        to: targetSquare,
-        promotion: promotionPiece,
-      });
-
-      if (move === null) {
-        setError('Invalid move');
-        playSound('error');
-        return false;
-      }
-
-      if (move.captured) {
-        playSound('capture');
-      } else {
-        playSound('move');
-      }
-
-      if (game.inCheck()) {
-        playSound('check');
-      }
-
-      setFen(game.fen());
-      setError('');
-      return true;
-    } catch (err) {
-      console.error('Error in move:', err);
-      setError('Incorrect move');
-      playSound('error');
-      return false;
-    }
-  };
+  const onDrop = handleDrop(game, setFen, setError);
 
   const customPieces = useMemo(() => {
     const pieces = ["wP", "wN", "wB", "wR", "wQ", "wK", "bP", "bN", "bB", "bR", "bQ", "bK"];
@@ -85,6 +58,9 @@ const ChessGame = () => {
         <Chessboard
           position={fen}
           onPieceDrop={onDrop}
+          onSquareClick={onSquareClick}
+          onSquareRightClick={onSquareRightClick}
+          onPromotionPieceSelect={onPromotionPieceSelect}
           customPieces={customPieces}
           style={{
             backgroundColor: '#f0d9b5',
@@ -93,6 +69,12 @@ const ChessGame = () => {
           }}
           customDarkSquareStyle={customDarkSquareStyle}
           customLightSquareStyle={customLightSquareStyle}
+          customSquareStyles={{
+            ...optionSquares,
+            ...rightClickedSquares
+          }}
+          promotionToSquare={moveTo}
+          showPromotionDialog={showPromotionDialog}
         />
       </div>
     </div>
