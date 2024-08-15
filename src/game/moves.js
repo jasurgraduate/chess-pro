@@ -15,7 +15,6 @@ export const handleDrop = (game, setFen, setError) => (sourceSquare, targetSquar
 
     if (move === null) {
       setError('Invalid move');
-      playSound('error');
       return false;
     }
 
@@ -39,7 +38,7 @@ export const handleDrop = (game, setFen, setError) => (sourceSquare, targetSquar
     // Only set the error message and play sound if it's not a promotion error
     if (!err.message.includes('promotion')) {
       setError('Incorrect move');
-      playSound('error');
+      
     }
     return false;
   }

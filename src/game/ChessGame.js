@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
 import Error from './error';
 import { Chess } from 'chess.js';
@@ -10,7 +10,7 @@ import './ChessGame.css';
 const ChessGame = () => {
   const [fen, setFen] = useState(new Chess().fen()); // Initialize with the starting FEN
   const [error, setError] = useState('');
-
+  const [rotation, setRotation] = useState(0); // State to track board rotation
   const {
     game,
     onSquareClick,
@@ -24,6 +24,14 @@ const ChessGame = () => {
 
   const onDrop = handleDrop(game, setFen, setError);
 
+  // Update rotation after each move
+  useEffect(() => {
+    if (game) {
+      setRotation(prevRotation => (prevRotation + 180) % 360); // Rotate 180 degrees
+    }
+  }, [fen, game]);
+
+  // Piece components with rotation based on whose turn it is
   const customPieces = useMemo(() => {
     const pieces = ["wP", "wN", "wB", "wR", "wQ", "wK", "bP", "bN", "bB", "bR", "bQ", "bK"];
     const pieceComponents = {};
@@ -35,12 +43,13 @@ const ChessGame = () => {
             height: squareWidth,
             backgroundImage: `url(/chess-pro/img/${piece}.png)`,
             backgroundSize: "100%",
+            transform: `rotate(${rotation}deg)`,
           }}
         />
       );
     });
     return pieceComponents;
-  }, []);
+  }, [rotation]);
 
   const customDarkSquareStyle = {
     backgroundColor: '#779556',
@@ -66,6 +75,8 @@ const ChessGame = () => {
             backgroundColor: '#f0d9b5',
             borderRadius: '8px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            transform: `rotate(${rotation}deg)`, // Rotate the board
+            transformOrigin: 'center',
           }}
           customDarkSquareStyle={customDarkSquareStyle}
           customLightSquareStyle={customLightSquareStyle}
