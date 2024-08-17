@@ -1,46 +1,46 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Chess } from 'chess.js'; // Import Chess from chess.js
 
 export const useOnlineGame = (setFen) => {
   const [gameId, setGameId] = useState(null);
   const [playerName, setPlayerName] = useState('');
-  const [playerColor, setPlayerColor] = useState('white'); // Track player's color
-  const [opponentOnline, setOpponentOnline] = useState(false); // Track opponent's online status
 
   useEffect(() => {
-    // Setup listeners for online game events here
-    // Simulate opponent connection status
-    const mockOpponentConnection = () => {
-      setTimeout(() => {
-        setOpponentOnline(true); // Opponent connects
-      }, 3000);
-    };
-    mockOpponentConnection();
+    const storedGameId = localStorage.getItem('gameId');
+    const storedFen = localStorage.getItem('fen');
+
+    if (storedGameId) {
+      setGameId(storedGameId);
+      if (storedFen) setFen(storedFen);
+    }
   }, [setFen]);
 
   const createGame = () => {
-    setPlayerColor('white');
-    const newGameId = 'generated-game-id'; // Replace with real game ID from backend
+    const newGameId = Date.now().toString(); // Simple unique ID generation
     setGameId(newGameId);
+    localStorage.setItem('gameId', newGameId);
+    localStorage.setItem('fen', new Chess().fen());
   };
 
   const joinGame = (id) => {
-    setPlayerColor('black');
     setGameId(id);
+    localStorage.setItem('gameId', id);
+    // Poll for updates
+    pollForUpdates(id);
   };
 
-  const updateGame = (fen) => {
-    // Sync the game state with the backend
-    console.log(`Updating game ${gameId} with FEN: ${fen}`);
+  const pollForUpdates = (id) => {
+    const interval = setInterval(() => {
+      const storedFen = localStorage.getItem('fen');
+      if (storedFen) setFen(storedFen);
+    }, 1000);
+
+    return () => clearInterval(interval);
   };
 
-  return {
-    gameId,
-    playerName,
-    setPlayerName,
-    createGame,
-    joinGame,
-    updateGame,
-    playerColor,
-    opponentOnline, // Provide opponent's online status
+  const updateGame = (newFen) => {
+    localStorage.setItem('fen', newFen);
   };
+
+  return { gameId, playerName, setPlayerName, createGame, joinGame, updateGame };
 };

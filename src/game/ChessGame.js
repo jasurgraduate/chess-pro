@@ -11,7 +11,7 @@ import './ChessGame.css';
 const ChessGame = () => {
   const [fen, setFen] = useState(new Chess().fen());
   const [error, setError] = useState('');
-
+  
   const {
     game,
     onSquareClick,
@@ -24,17 +24,17 @@ const ChessGame = () => {
   } = useClickHandling(setFen);
 
   const onDrop = handleDrop(game, setFen, setError);
-
+  
   // Online game logic
   const {
     gameId,
     playerName,
     setPlayerName,
+    isHost,
     createGame,
     joinGame,
     updateGame,
-    playerColor,
-    opponentOnline,
+    resetGame
   } = useOnlineGame(setFen);
 
   const customPieces = useMemo(() => {
@@ -77,20 +77,6 @@ const ChessGame = () => {
       <Error message={error} />
       <GameState game={game} />
       <div className="player-info">
-        <div className="player-names">
-          <div className="player">
-            <span className={`status-icon ${playerColor === 'white' ? 'green' : opponentOnline ? 'green' : 'red'}`}>
-              {playerColor === 'white' ? '●' : opponentOnline ? '●' : '●'}
-            </span>
-            <span>{playerColor === 'white' ? playerName || 'You' : 'Opponent'}</span>
-          </div>
-          <div className="player">
-            <span className={`status-icon ${playerColor === 'black' ? 'green' : opponentOnline ? 'green' : 'red'}`}>
-              {playerColor === 'black' ? '●' : opponentOnline ? '●' : '●'}
-            </span>
-            <span>{playerColor === 'black' ? playerName || 'You' : 'Opponent'}</span>
-          </div>
-        </div>
         <input
           type="text"
           placeholder="Your Name"
