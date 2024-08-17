@@ -46,7 +46,7 @@ const ChessGame = () => {
           style={{
             width: squareWidth,
             height: squareWidth,
-            backgroundImage: `url(/chess-pro/img/${piece}.png)`,
+            backgroundImage: `url(/img/${piece}.png)`,
             backgroundSize: "100%",
           }}
         />
