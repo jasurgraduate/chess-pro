@@ -2,7 +2,7 @@
   "name": "chess-pro",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jasurgraduate.github.io/chess-pro",
+  "homepage": "https://uzchess.netlify.com/chess-pro",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
